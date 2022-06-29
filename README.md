@@ -3,6 +3,14 @@
 This package implements a segment tree with nodes of a generic type. Segment tree is a data structure allowing to
 calculate a function on a segment of a slice in *O(log n)* time. More about segment tree: https://en.wikipedia.org/wiki/Segment_tree.
 
+## Installation
+Since the package uses generics, the version of Go must be >= 1.18
+
+Installing:
+```
+go get github.com/kwarabei/segtree
+```
+
 ## API
 
 The package has a public struct called SegTree with a defined set of methods.
