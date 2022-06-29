@@ -139,3 +139,61 @@ func TestStringConcatSegTree(t *testing.T) {
 		}
 	}
 }
+
+type Coord struct {
+	x int
+	y int
+}
+
+func (c *Coord) Dist() int {
+	// Chebyshev distance
+	a := c.x
+	if a < 0 {
+		a = -a
+	}
+	b := c.y
+	if b < 0 {
+		b = -b
+	}
+	res := a
+	if b > a {
+		res = b
+	}
+
+	return res
+}
+
+func TestStructNodes(t *testing.T) {
+
+	var s SegTree[Coord]
+	maxRadiusVector := func(values ...Coord) Coord {
+		var longestI int = 0
+		var longest = values[0].Dist()
+		for i := 1; i < len(values); i++ {
+			if values[i].Dist() > longest {
+				longestI = i
+				longest = values[i].Dist()
+			}
+		}
+
+		return values[longestI]
+	}
+
+	s.Setup([]Coord{Coord{1, 1}, Coord{2, 4}, Coord{-1, -1}, Coord{5, 3}}, maxRadiusVector)
+	queries := [][]int{{0, 3}, {1, 2}}
+	expectedResults := []Coord{Coord{5, 3}, Coord{2, 4}}
+	for i := range queries {
+		start := queries[i][0]
+		end := queries[i][1]
+		res := s.Query(start, end)
+		if res != expectedResults[i] {
+			errMsg := fmt.Sprintf("Calculated sum query for elements from %d to %d"+
+				"(inclusively) of an array %+v\n"+
+				"Expected result: %+v\n"+
+				"Got instead: %+v\n", start, end, s.GetArray(), expectedResults[i], res)
+
+			t.Fatalf(errMsg)
+		}
+
+	}
+}
